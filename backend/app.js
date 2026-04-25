@@ -3,10 +3,10 @@ import express from "express";
 import connectDB from "./db/connect.js";
 // import UserRouter from "./routes/user_router.js";
 import passport from "passport";
-import { Github } from "./config/auth.js";
+// import { Github } from "./config/auth.js";
 import session from "express-session";
 import cors from "cors";
-import AuthRouter from "./routes/auth_router.js";
+// import AuthRouter from "./routes/auth_router.js";
 import QARouter from "./routes/qas_router.js";
 
 const app = express();
@@ -42,7 +42,7 @@ passport.deserializeUser((user, done) => {
 
 // routes
 // app.use("/api/auth", UserRouter);
-app.use("/api/auth", AuthRouter);
+// app.use("/api/auth", AuthRouter);
 app.use("/api/qas", QARouter);
 
 const port = process.env.PORT || 3000;
