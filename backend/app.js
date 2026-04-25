@@ -8,6 +8,7 @@ import session from "express-session";
 import cors from "cors";
 // import AuthRouter from "./routes/auth_router.js";
 import QARouter from "./routes/qas_router.js";
+import http from "http";
 
 const app = express();
 
@@ -45,6 +46,10 @@ app.use(
 // app.use("/api/auth", AuthRouter);
 app.use("/api/qas", QARouter);
 
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Alive!" });
+});
+
 const port = process.env.PORT || 3000;
 
 const startApp = async () => {
@@ -53,6 +58,13 @@ const startApp = async () => {
 
     app.listen(port, () => {
       console.log("listening on port", port);
+      setInterval(() => {
+        http
+          .request(`http://localhost:${port}/`, (res) => {
+            console.log("Server available");
+          })
+          .end();
+      }, 600000);
     });
   } catch (error) {
     console.log(error);
