@@ -8,7 +8,7 @@ import session from "express-session";
 import cors from "cors";
 // import AuthRouter from "./routes/auth_router.js";
 import QARouter from "./routes/qas_router.js";
-import http from "http";
+import https from "https";
 
 const app = express();
 
@@ -59,7 +59,7 @@ const startApp = async () => {
     app.listen(port, () => {
       console.log("listening on port", port);
       setInterval(() => {
-        http
+        https
           .request(`${process.env.PROD_URL}`, (res) => {
             console.log("Server available");
           })
