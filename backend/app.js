@@ -60,7 +60,7 @@ const startApp = async () => {
       console.log("listening on port", port);
       setInterval(() => {
         http
-          .request(`http://localhost:${port}/`, (res) => {
+          .request(`${process.env.PROD_URL}`, (res) => {
             console.log("Server available");
           })
           .end();
