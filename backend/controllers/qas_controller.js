@@ -5,11 +5,10 @@ export const createQA = async (req, res) => {
   try {
     await QuestionAnswer.create({ question: req.body.question });
 
-    return res.json({ msg: "QA created!", statusCode: StatusCodes.CREATED });
+    return res.status(StatusCodes.CREATED).json({ msg: "QA created!" });
   } catch (error) {
-    return res.json({
+    return res.status(StatusCodes.BAD_REQUEST).json({
       message: "Failed to create new QA!",
-      statusCode: StatusCodes.BAD_REQUEST,
     });
   }
 };
@@ -17,12 +16,20 @@ export const createQA = async (req, res) => {
 export const getAllQAs = async (req, res) => {
   try {
     const qas = await QuestionAnswer.find();
-    return res.json({
+    return res.status(StatusCodes.OK).json({
       questions_answers: qas,
-      statusCode: StatusCodes.OK,
     });
   } catch (error) {
-    return res.json({ message: error, statusCode: StatusCodes.UNAUTHORIZED });
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: error });
+  }
+};
+
+export const getQA = async (req, res) => {
+  try {
+    const qa = await QuestionAnswer.findOne({ _id: req.params.id });
+    return res.status(StatusCodes.OK).json(qa);
+  } catch (error) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: error });
   }
 };
 
@@ -32,18 +39,16 @@ export const deleteQA = async (req, res) => {
       _id: req.params.id,
     });
     if (result) {
-      return res.json({
+      return res.status(StatusCodes.ACCEPTED).json({
         message: `Deleted ${req.params.id}`,
-        statusCode: StatusCodes.ACCEPTED,
       });
     } else {
-      return res.json({
+      return res.status(StatusCodes.NOT_FOUND).json({
         message: "Not found",
-        statusCode: StatusCodes.NOT_FOUND,
       });
     }
   } catch (error) {
-    return res.json({ message: error, statusCode: StatusCodes.UNAUTHORIZED });
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: error });
   }
 };
 
@@ -55,11 +60,13 @@ export const updateQA = async (req, res) => {
       { ...req.body },
       options,
     );
-    return res.json({
+    if (!qa) {
+      return res.status(StatusCodes.NOT_FOUND).json({ message: "Not found" });
+    }
+    return res.status(StatusCodes.ACCEPTED).json({
       message: `Updated ${req.params.id}`,
-      statusCode: StatusCodes.ACCEPTED,
     });
   } catch (error) {
-    return res.json({ message: error, statusCode: StatusCodes.UNAUTHORIZED });
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: error });
   }
 };
