@@ -3,14 +3,13 @@ import passport from "passport";
 
 export const checkUserValid = (req, res) => {
   if (req.user) {
-    res.json({ user: req.user, statusCode: StatusCodes.OK });
+    res.status(StatusCodes.OK).json({ user: req.user });
   }
   res.json({ user: null, statusCode: StatusCodes.FORBIDDEN });
 };
 
 export const checkUserInvalid = (req, res) => {
-  res.json({
-    statusCode: StatusCodes.UNAUTHORIZED,
+  res.status(StatusCodes.UNAUTHORIZED).json({
     message: "failed to authorized",
   });
 };
@@ -23,7 +22,7 @@ export const logoutUser = (req, res, next) => {
 
     req.session.destroy((err) => {
       res.clearCookie("connect.sid");
-      res.json({ statusCode: StatusCodes.OK, message: "Logout", user: {} });
+      res.status(StatusCodes.OK).json({ message: "Logout", user: {} });
     });
   });
 };
