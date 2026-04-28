@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { ListItem } from "./ListItem";
 import { Link } from "react-router";
 
+const url = import.meta.env.VITE_DEV_MODE
+  ? import.meta.env.VITE_BACKEND_LOCAL
+  : import.meta.env.VITE_BACKEND_URL;
+
 export const ListWrapper = () => {
   const [qa_list, set_qa_list] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadList = async () => {
-      const req = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/qas`);
+      const req = await fetch(`${url}/api/qas`);
       const data = await req.json();
       set_qa_list(data.questions_answers);
       setLoading(false);
