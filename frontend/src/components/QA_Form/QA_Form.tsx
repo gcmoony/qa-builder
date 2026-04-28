@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import LoadingScreen from "../LoadingScreen";
 
+const url = import.meta.env.VITE_DEV_MODE
+  ? import.meta.env.VITE_BACKEND_LOCAL
+  : import.meta.env.VITE_BACKEND_URL;
+
 export const QA_Form = () => {
   const params = useParams();
   const nav = useNavigate();
@@ -19,9 +23,7 @@ export const QA_Form = () => {
         setLoading(false);
         return;
       }
-      const request = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/qas/${params.id}`,
-      );
+      const request = await fetch(`${url}/api/qas/${params.id}`);
       const data = await request.json();
       set_qa_data({ ...data });
       setLoading(false);
@@ -42,7 +44,7 @@ export const QA_Form = () => {
   };
 
   const createQA = async () => {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/qas`, {
+    const res = await fetch(`${url}/api/qas`, {
       method: "POST",
       body: JSON.stringify(qa_data),
       headers: { "Content-Type": "application/json" },
@@ -54,14 +56,11 @@ export const QA_Form = () => {
   };
 
   const updateQA = async () => {
-    const res = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/qas/${params.id}`,
-      {
-        method: "PUT",
-        body: JSON.stringify(qa_data),
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+    const res = await fetch(`${url}/api/qas/${params.id}`, {
+      method: "PUT",
+      body: JSON.stringify(qa_data),
+      headers: { "Content-Type": "application/json" },
+    });
     if (res.ok) {
       nav("/");
     }
